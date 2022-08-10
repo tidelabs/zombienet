@@ -55,14 +55,10 @@ export async function generateKeystoreFiles(
 
   const paths: string[] = [];
   const keysHash = {
-    aura: isStatemint ? node.accounts.ed_account.publicKey : node.accounts.sr_account.publicKey,
     babe: node.accounts.sr_account.publicKey,
     imon: node.accounts.sr_account.publicKey,
     gran: node.accounts.ed_account.publicKey,
     audi: node.accounts.sr_account.publicKey,
-    asgn: node.accounts.sr_account.publicKey,
-    para: node.accounts.sr_account.publicKey,
-    beef: node.accounts.ec_account.publicKey,
   };
 
   for (const [k, v] of Object.entries(keysHash)) {

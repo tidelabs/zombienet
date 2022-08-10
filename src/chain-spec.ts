@@ -42,10 +42,9 @@ export function clearAuthorities(specPath: string, keyType: KeyType = "session")
 
   keys.length = 0;
 
-  if(keyType === "session") {
-    const runtime = getRuntimeConfig(chainSpec);
-    if(runtime.collatorSelection && runtime.collatorSelection.invulnerables) runtime.collatorSelection.invulnerables.length = 0;
-  }
+  const runtimeConfig = getRuntimeConfig(chainSpec);
+  runtimeConfig.staking.invulnerables = [];
+  runtimeConfig.staking.stakers = [];
 
   writeChainSpec(specPath, chainSpec);
   console.log(
@@ -55,7 +54,7 @@ export function clearAuthorities(specPath: string, keyType: KeyType = "session")
 
 // Add additional authorities to chain spec in `session.keys`
 export async function addAuthority(specPath: string, name: string, accounts: any, useStash: boolean = true, isStatemint: boolean = false) {
-  const { sr_stash, sr_account, ed_account, ec_account } = accounts;
+  const { sr_stash, sr_account, ed_account } = accounts;
 
   const key = [
     useStash ? sr_stash.address : sr_account.address,
@@ -64,12 +63,7 @@ export async function addAuthority(specPath: string, name: string, accounts: any
       grandpa: ed_account.address,
       babe: sr_account.address,
       im_online: sr_account.address,
-      parachain_validator: sr_account.address,
       authority_discovery: sr_account.address,
-      para_validator: sr_account.address,
-      para_assignment: sr_account.address,
-      beefy: encodeAddress(ec_account.publicKey),
-      aura: isStatemint ? ed_account.address : sr_account.address,
     },
   ];
 
@@ -79,11 +73,6 @@ export async function addAuthority(specPath: string, name: string, accounts: any
   if(! keys) return;
 
   keys.push(key);
-
-  // Collators
-  const runtime = getRuntimeConfig(chainSpec);
-  if(runtime.collatorSelection && runtime.collatorSelection.invulnerables) runtime.collatorSelection.invulnerables.push(sr_account.address);
-
 
   writeChainSpec(specPath, chainSpec);
   console.log(

@@ -97,7 +97,7 @@ export function getMetricName(metricName: string): string {
       break;
   }
 
-  return metricNameTouse;
+  return `tidechain_substrate_${metricNameTouse}`;
 }
 
 function _extractMetrics(text: string): Metrics {
