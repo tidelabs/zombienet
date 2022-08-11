@@ -241,7 +241,8 @@ export async function genCmd(
 
   if (prometheus && ! args.includes("--prometheus-external")) args.push("--prometheus-external");
 
-  if(jaegerUrl && zombieRole === "node") args.push(...["--jaeger-agent", jaegerUrl]);
+  // fixme: not supported yet in tidechain
+  //if(jaegerUrl && zombieRole === "node") args.push(...["--jaeger-agent", jaegerUrl]);
 
   if (validator && ! args.includes("--validator")) args.push("--validator");
 
